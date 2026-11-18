@@ -97,23 +97,31 @@ export function recordFatalMainProcessError(kind: FatalMainProcessErrorKind, err
   }
 }
 
-export function installUncaughtPipeErrorGuard(): void {
-  const onUncaughtException = (error: unknown): void => {
+// Electron's default handler shows a modal that blocks main until someone clicks OK; crash with a dump instead.
+function crashMainProcess(): void {
+  try {
+    process.crash()
+  } catch {
+    // Unreachable unless the native crash is unavailable; never fall through to the modal.
+  }
+  process.exit(70)
+}
+
+export function installUncaughtPipeErrorGuard(crash: () => void = crashMainProcess): void {
+  let crashing = false
+  process.on('uncaughtException', (error: unknown): void => {
     const errorCode = readErrorProperty(error, 'code')
     if (errorCode === 'EIO' || errorCode === 'EPIPE') {
       return
     }
-
-    // #9441: the next rethrow leaves no macOS crash report; persist evidence first.
-    recordFatalMainProcessError('main_uncaught_exception', error)
-    process.off('uncaughtException', onUncaughtException)
-    // Throwing inside the handler exits with status 7; rethrow next tick to retain the real stack.
-    setImmediate(() => {
-      throw error
-    })
-  }
-
-  process.on('uncaughtException', onUncaughtException)
+    // A fault while recording must not recurse into a second record.
+    if (!crashing) {
+      crashing = true
+      // #9441: persist evidence before the process dies.
+      recordFatalMainProcessError('main_uncaught_exception', error)
+    }
+    crash()
+  })
   removeBootstrapFatalExitGuard()
 }
 
