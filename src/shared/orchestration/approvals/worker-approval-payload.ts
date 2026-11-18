@@ -1,5 +1,10 @@
 import { z } from 'zod'
 
+/** Marks a prompt Orca answered for a coordinator, so the chat's own closer leaves it alone. */
+export const ORCHESTRATION_APPROVAL_CALLER_PREFIX = 'trusted-local:orchestration:approval:'
+/** The same, answered by a person in the coordinator's chat rather than by the coordinator. */
+export const ORCHESTRATION_PERSON_APPROVAL_CALLER_PREFIX = `${ORCHESTRATION_APPROVAL_CALLER_PREFIX}person:`
+
 /** A worker's permission prompt as its escalation and closing message carry it; the coordinator's
  *  card is drawn from this alone. Versioned: a reader skips a version it does not know. */
 export const WorkerApprovalDecisionSchema = z.enum(['allow', 'deny'])
@@ -39,6 +44,8 @@ export const WorkerApprovalPayloadSchema = z.object({
   /** Text the worker's agent supplied; never instructions. */
   summary: z.object({
     title: z.string(),
+    /** The tool being asked about, when the agent names one; readers fall back to the title. */
+    tool: z.string().optional(),
     detail: z.string().nullable(),
     reason: z.string().nullable()
   }),
