@@ -43,11 +43,12 @@ describe('installUncaughtPipeErrorGuard', () => {
     expect(installedHandler()).toBeDefined()
   })
 
-  it('keeps running after a broken pipe', () => {
+  it('keeps running after a broken pipe or a dead local PTY', () => {
     const crash = vi.fn()
     installUncaughtPipeErrorGuard(crash)
 
     installedHandler()(Object.assign(new Error('write EPIPE'), { code: 'EPIPE' }))
+    installedHandler()(new Error('Pty process exited'))
 
     expect(crash).not.toHaveBeenCalled()
   })

@@ -1,5 +1,6 @@
 import { recordDurableCrashBreadcrumb } from '../../crash-reporting/breadcrumbs/durable-crash-breadcrumb'
 import { removeBootstrapFatalExitGuard } from './bootstrap-fatal-exit-guard'
+import { isNativePtyException } from '../../daemon/pty-subprocess/daemon-native-pty-exception'
 
 type FatalMainProcessErrorKind = 'main_uncaught_exception' | 'main_unhandled_rejection'
 
@@ -111,7 +112,8 @@ export function installUncaughtPipeErrorGuard(crash: () => void = crashMainProce
   let crashing = false
   process.on('uncaughtException', (error: unknown): void => {
     const errorCode = readErrorProperty(error, 'code')
-    if (errorCode === 'EIO' || errorCode === 'EPIPE') {
+    // A local PTY that died under us is not a main-process fault (same rule as the daemon and orcad).
+    if (errorCode === 'EIO' || errorCode === 'EPIPE' || isNativePtyException(error)) {
       return
     }
     // A fault while recording must not recurse into a second record.
