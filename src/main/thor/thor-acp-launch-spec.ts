@@ -1,7 +1,8 @@
 import type { AcpLaunchSpec } from '../acp/launch/acp-launch-contract'
 import { GENERIC_ACP_DIALECT } from '../acp/acp-dialects/acp-dialect'
-import { inheritedHomeAccountBinding } from '../acp/launch/acp-account-binding'
+import { directoryAccountBinding } from '../acp/launch/acp-account-binding'
 import type { StructuredAgentSessionHistory } from '../native-chat/conversation-adoption/structured-agent-cli-conversations'
+import { join } from 'node:path'
 
 const THOR_SESSION_HISTORY: StructuredAgentSessionHistory = {
   // Thor's ACP session ID is the provider resume handle; Orca imports no Thor terminal history.
@@ -12,14 +13,13 @@ const THOR_SESSION_HISTORY: StructuredAgentSessionHistory = {
 
 export const THOR_LAUNCH_SPEC: AcpLaunchSpec = {
   agent: 'thor',
-  command: 'thor',
+  command: 'thor-agent',
   // Thor's ACP server fixes the persona to main and owns its model selection.
   args: () => ['acp'],
   env: {},
   dialect: GENERIC_ACP_DIALECT,
   loginCommand: [],
-  // Preserve Thor's ordinary environment and ~/.thor configuration instead of inventing THOR_HOME.
-  account: inheritedHomeAccountBinding(),
+  account: directoryAccountBinding('THOR_CLI_HOME', (homePath) => join(homePath, '.thor')),
   installDirectories: () => [],
   modelDiscovery: {
     kind: 'unavailable',

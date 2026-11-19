@@ -148,7 +148,7 @@ export function primaryAgentCatalogEntries(): AgentCatalogEntry[] {
     {
       id: 'thor',
       label: translate('auto.lib.agent.catalog.thor_label', 'Thor'),
-      cmd: 'thor',
+      cmd: 'thor-agent',
       homepageUrl: 'https://github.com/azafred/thor'
     }
   ]

@@ -271,7 +271,7 @@ const TUI_AGENT_CONFIG_SOURCE: Record<TuiAgent, TuiAgentConfigSource> = {
     promptInjectionMode: 'hermes-query'
   },
   thor: {
-    detectCmd: 'thor',
+    detectCmd: 'thor-agent',
     promptInjectionMode: 'stdin-after-start'
   },
   openclaw: {
