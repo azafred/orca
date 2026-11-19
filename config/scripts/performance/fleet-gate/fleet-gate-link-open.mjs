@@ -101,6 +101,21 @@ export async function measureLinkOpen({ page, app }) {
   const rows = []
   try {
     await app.evaluate(installMainRecorder)
+    // Setup, not measured: a seeded workspace must be active for the tab to open in.
+    const active = await page.evaluate(async () => {
+      const state = window.__store.getState()
+      if (!state.activeWorktreeId) {
+        const first = Object.keys(state.tabsByWorktree ?? {})[0]
+        if (first) {
+          state.setActiveWorktree(first)
+        }
+      }
+      await new Promise((resolve) => setTimeout(resolve, 2_000))
+      return window.__store.getState().activeWorktreeId
+    })
+    if (!active) {
+      return { note: 'no workspace to open links in', undriven: 'no active workspace' }
+    }
     for (const [stall, period] of STALLS) {
       for (let i = 0; i < RUNS; i += 1) {
         await app.evaluate((_electron, arg) => globalThis.__linkOpenStall(arg[0], arg[1]), [0, 0])
