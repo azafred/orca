@@ -33,6 +33,7 @@ export type TuiAgent =
   | 'qwen-code'
   | 'rovo' // Rovo Dev
   | 'hermes' // Hermes Agent
+  | 'thor'
   | 'openclaw'
   | 'copilot'
   | 'grok'

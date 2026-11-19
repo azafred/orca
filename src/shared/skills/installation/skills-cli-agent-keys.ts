@@ -39,6 +39,7 @@ export const SKILLS_CLI_AGENT_KEY_BY_TUI_AGENT = {
   'qwen-code': 'qwen-code',
   rovo: 'rovodev',
   hermes: 'hermes-agent',
+  thor: null,
   openclaw: 'openclaw',
   copilot: 'github-copilot',
   grok: 'grok',

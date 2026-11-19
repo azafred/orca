@@ -40,7 +40,8 @@ export const NATIVE_CHAT_AGENTS = [
   'kimi',
   'pi',
   'antigravity',
-  'hermes'
+  'hermes',
+  'thor'
 ] as const
 
 export type NativeChatAgent = (typeof NATIVE_CHAT_AGENTS)[number]
@@ -61,7 +62,9 @@ const AGENT_CHAT_PERMISSION_MODES_BY_AGENT: Record<
   // Pi asks no approvals, so its chats run with every tool it has, as its terminal does.
   pi: null,
   antigravity: EDIT_ACCEPTING_CHAT_PERMISSION_MODES,
-  hermes: EDIT_ACCEPTING_CHAT_PERMISSION_MODES
+  hermes: EDIT_ACCEPTING_CHAT_PERMISSION_MODES,
+  // Thor's main persona runs local tools under Thor's existing YOLO policy; Orca cannot narrow it.
+  thor: null
 }
 
 export function isNativeChatAgent(agent: string): agent is NativeChatAgent {

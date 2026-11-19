@@ -41,6 +41,7 @@ const TUI_AGENT_KIND_BY_AGENT = {
   'qwen-code': 'qwen-code',
   rovo: 'rovo',
   hermes: 'hermes',
+  thor: 'thor',
   openclaw: 'openclaw',
   copilot: 'copilot',
   grok: 'grok',

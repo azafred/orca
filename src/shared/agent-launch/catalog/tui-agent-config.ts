@@ -270,6 +270,10 @@ const TUI_AGENT_CONFIG_SOURCE: Record<TuiAgent, TuiAgentConfigSource> = {
     // Why: Hermes delivers the prompt via its startup-query contract, submitting only after the composer is ready.
     promptInjectionMode: 'hermes-query'
   },
+  thor: {
+    detectCmd: 'thor-agent',
+    promptInjectionMode: 'stdin-after-start'
+  },
   openclaw: {
     detectCmd: 'openclaw',
     promptInjectionMode: 'stdin-after-start'
