@@ -49,6 +49,20 @@ export function directoryAccountBinding(
   }
 }
 
+/** Pins the host home for session identity without adding an account-home override to the child. */
+export function inheritedHomeAccountBinding(): AcpAccountBinding {
+  const root = directoryAccountBinding('HOME', (homePath) => homePath)
+  return {
+    ...root,
+    environment: (home, env) => {
+      if (!isLegacyAgentSessionAccountHome(home) || home.variable !== 'HOME') {
+        throw new Error('sessions of this agent pin HOME')
+      }
+      return env
+    }
+  }
+}
+
 /** Restricts plaintext sign-in folders to their owner before every spawn. */
 export function hostFolderAccountBinding(
   variable: string,

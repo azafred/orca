@@ -44,6 +44,7 @@ export const AGENT_KIND_VALUES = [
   'qwen-code',
   'rovo',
   'hermes',
+  'thor',
   'openclaw',
   'copilot',
   'grok',

@@ -43,6 +43,7 @@ export const TUI_AGENT_DISPLAY_NAMES: Record<TuiAgent, string> = {
   'qwen-code': 'Qwen Code',
   rovo: 'Rovo Dev',
   hermes: 'Hermes',
+  thor: 'Thor',
   openclaw: 'OpenClaw',
   copilot: 'GitHub Copilot',
   grok: 'Grok',

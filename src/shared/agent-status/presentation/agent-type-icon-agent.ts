@@ -38,6 +38,7 @@ const ICONABLE_AGENT_TYPES: Record<TerminalAgent, true> = {
   'qwen-code': true,
   rovo: true,
   hermes: true,
+  thor: true,
   openclaw: true,
   copilot: true,
   grok: true,

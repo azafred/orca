@@ -144,6 +144,12 @@ export function primaryAgentCatalogEntries(): AgentCatalogEntry[] {
       cmd: 'agy',
       searchAliases: ['agy'],
       homepageUrl: 'https://antigravity.google/docs/cli-overview'
+    },
+    {
+      id: 'thor',
+      label: translate('auto.lib.agent.catalog.thor_label', 'Thor'),
+      cmd: 'thor',
+      homepageUrl: 'https://github.com/azafred/thor'
     }
   ]
 }
