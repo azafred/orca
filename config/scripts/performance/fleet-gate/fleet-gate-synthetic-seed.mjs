@@ -4,7 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { lockCacheEntry } from './fleet-gate-cache-lock.mjs'
 
-export const SEED_SHAPE = { worktrees: 2_400, folders: 105, chats: 3_306, terminals: 1_623 }
+export const SEED_SHAPE = { worktrees: 1_800, folders: 105, chats: 1_800, terminals: 200 }
 const SEED_FORMAT = 2
 
 function git(cwd, args) {
