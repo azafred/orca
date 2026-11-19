@@ -52,4 +52,18 @@ describe('installUncaughtPipeErrorGuard', () => {
 
     expect(crash).not.toHaveBeenCalled()
   })
+
+  it('still crashes when inspecting the error throws', () => {
+    const crash = vi.fn()
+    installUncaughtPipeErrorGuard(crash)
+    const hostile = Object.defineProperty(new Error('real fault'), 'name', {
+      get() {
+        throw new Error('name getter failed')
+      }
+    })
+
+    installedHandler()(hostile)
+
+    expect(crash).toHaveBeenCalled()
+  })
 })

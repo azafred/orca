@@ -108,12 +108,21 @@ function crashMainProcess(): void {
   process.exit(70)
 }
 
+// A hostile error (e.g. a throwing getter) must still reach the fatal path, not escape it.
+function isBenignNativePtyFault(error: unknown): boolean {
+  try {
+    return isNativePtyException(error)
+  } catch {
+    return false
+  }
+}
+
 export function installUncaughtPipeErrorGuard(crash: () => void = crashMainProcess): void {
   let crashing = false
   process.on('uncaughtException', (error: unknown): void => {
     const errorCode = readErrorProperty(error, 'code')
     // A local PTY that died under us is not a main-process fault (same rule as the daemon and orcad).
-    if (errorCode === 'EIO' || errorCode === 'EPIPE' || isNativePtyException(error)) {
+    if (errorCode === 'EIO' || errorCode === 'EPIPE' || isBenignNativePtyFault(error)) {
       return
     }
     // A fault while recording must not recurse into a second record.
